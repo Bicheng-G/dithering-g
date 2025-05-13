@@ -10,7 +10,7 @@ import './styles.css';
 const DemoName: FC = () => (
   <div className="demo-container">
     <div className="demo-name">
-      <a href="https://bicheng.me" rel="noopener noreferrer">Bicheng Gu</a>
+      <a href="https://bicheng.me/?intro=1" rel="noopener noreferrer">Bicheng Gu</a>
     </div>
     <div className="demo-author" hidden={true}>
       <span className="underlined">
