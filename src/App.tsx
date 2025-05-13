@@ -9,9 +9,11 @@ import './styles.css';
 
 const DemoName: FC = () => (
   <div className="demo-container">
-    <div className="demo-name">Dithering G</div>
-    <div className="demo-author">
-      made by <span className="underlined">
+    <div className="demo-name">
+      <a href="https://bicheng.me" target="_blank" rel="noopener noreferrer">Bicheng Gu</a>
+    </div>
+    <div className="demo-author" hidden={true}>
+      <span className="underlined">
         <a href="https://bicheng.me" target="_blank" rel="noopener noreferrer">bicheng Gu</a>
       </span>
       {" • "}
@@ -80,7 +82,7 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      <Leva collapsed hidden={false} />
+      <Leva collapsed hidden={true} />
       <Canvas 
         shadows 
         camera={{ position: [0, -1, 4], fov: 65 }}
@@ -92,13 +94,13 @@ export default function App(): JSX.Element {
           gl.setClearColor(new THREE.Color(bgColor));
         }}
       >
-        <group position={[0, -0.5, 0]}>
+        <group position={[-0.18, -0.5, 0]}>
           <Float 
             floatIntensity={2} 
             rotationIntensity={1}
             speed={2}
           >
-            <Center scale={modelScale} position={[0, 0.5, 0]} rotation={[0, -Math.PI / 3.5, -0.4]}>
+            <Center scale={modelScale} position={[-0.18, 0.5, 0]} rotation={[0, -Math.PI / 3.5, -0.4]}>
               <Helmet />
             </Center>
           </Float>

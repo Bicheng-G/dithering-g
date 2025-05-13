@@ -44,7 +44,13 @@ body {
   font-family: 'OptimusPrincepsSemiBold', serif;
   font-size: 46px;
   color: white;
-  pointer-events: none;
+}
+
+.demo-name a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  font-family: inherit;
 }
 
 .demo-author {
