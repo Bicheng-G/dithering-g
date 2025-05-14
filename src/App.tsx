@@ -1,12 +1,15 @@
-import { memo, FC, useEffect, useRef, useState, useCallback } from 'react';
+import { memo, FC, useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Center, Float, useGLTF } from '@react-three/drei';
 import { PostProcessing } from './post-processing';
 import { EnvironmentWrapper } from './environment';
 import * as THREE from 'three';
-import { useControls, folder, Leva } from 'leva';
+import { useControls, folder } from 'leva';
 import { RandomText } from './RandomText';
 import './styles.css';
+
+// Lazy load Leva
+const Leva = lazy(() => import('leva').then(module => ({ default: module.Leva })));
 
 const DemoName: FC = () => {
   const [showIcon, setShowIcon] = useState(false);
@@ -14,7 +17,7 @@ const DemoName: FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowIcon(true);
-    }, 1500); // 1-second delay
+    }, 2500); // 2.5second delay
     return () => clearTimeout(timer); // Cleanup timer on component unmount
   }, []);
 
@@ -112,7 +115,9 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      <Leva collapsed hidden={true} />
+      <Suspense fallback={null}>
+        <Leva collapsed hidden={true} />
+      </Suspense>
       <Canvas 
         shadows 
         camera={{ position: [0, -1, 4], fov: 65 }}
