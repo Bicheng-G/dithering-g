@@ -12,20 +12,51 @@ import './styles.css';
 // const Leva = lazy(() => import('leva').then(module => ({ default: module.Leva })));
 
 const DemoName: FC = () => {
-  const [showIcon, setShowIcon] = useState(false);
+  // const [showIcon, setShowIcon] = useState(false); // No longer needed for continuous loop
+  const [iconOpacity, setIconOpacity] = useState(0);
+  const glitchTimeoutRef = useRef<number | null>(null); // Ref to store timeout ID
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowIcon(true);
-    }, 2500); // 2.5second delay
-    return () => clearTimeout(timer); // Cleanup timer on component unmount
-  }, []);
+    const startAnimationTimeout = setTimeout(() => {
+      let currentStepInSequence = 0;
+      const glitchSteps = [0.6, 0.2, 0.8, 0.4, 1]; // Opacity steps for one glitch burst
+      const stepInterval = 75; // ms between individual opacity changes in a burst
+
+      function runFullGlitchSequence() {
+        // Reset step for the current sequence
+        currentStepInSequence = 0;
+        
+        function animateNextStep() {
+          if (currentStepInSequence < glitchSteps.length) {
+            setIconOpacity(glitchSteps[currentStepInSequence]);
+            currentStepInSequence++;
+            glitchTimeoutRef.current = window.setTimeout(animateNextStep, stepInterval);
+          } else {
+            // Current sequence finished, schedule the next full sequence with random delay
+            const randomLoopInterval = Math.random() * (2500 - 1500) + 1500; // 1.5s to 2.5s
+            glitchTimeoutRef.current = window.setTimeout(runFullGlitchSequence, randomLoopInterval);
+          }
+        }
+        animateNextStep(); // Start the steps of the current sequence
+      }
+      
+      runFullGlitchSequence(); // Start the first full glitch sequence
+
+    }, 2000); // 2-second delay before animation loop starts
+
+    return () => {
+      clearTimeout(startAnimationTimeout); // Clear the initial delay timeout
+      if (glitchTimeoutRef.current) {
+        clearTimeout(glitchTimeoutRef.current); // Clear the glitch loop timeout
+      }
+    };
+  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
 
   return (
     <div className="demo-container">
       <div className="demo-name">
         <a href="https://bicheng.me/?intro=1" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
-          <RandomText text="Bicheng Gu" />
+          <RandomText text="bicheng Gu" />
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             width="0.8em" 
@@ -35,8 +66,8 @@ const DemoName: FC = () => {
               marginLeft: '0.1em', 
               width: '0.75em', 
               height: '0.75em',
-              opacity: showIcon ? 1 : 0,
-              transition: 'opacity 4s ease-in-out'
+              opacity: iconOpacity, // Controlled by new state
+              // transition: 'opacity 4s ease-in-out' // Removed CSS transition
             }}
             viewBox="0 0 16 16"
           >
