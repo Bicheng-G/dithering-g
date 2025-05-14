@@ -5,22 +5,52 @@ import { PostProcessing } from './post-processing';
 import { EnvironmentWrapper } from './environment';
 import * as THREE from 'three';
 import { useControls, folder, Leva } from 'leva';
+import { RandomText } from './RandomText';
 import './styles.css';
 
-const DemoName: FC = () => (
-  <div className="demo-container">
-    <div className="demo-name">
-      <a href="https://bicheng.me/?intro=1" rel="noopener noreferrer">Bicheng Gu</a>
+const DemoName: FC = () => {
+  const [showIcon, setShowIcon] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowIcon(true);
+    }, 1500); // 1-second delay
+    return () => clearTimeout(timer); // Cleanup timer on component unmount
+  }, []);
+
+  return (
+    <div className="demo-container">
+      <div className="demo-name">
+        <a href="https://bicheng.me/?intro=1" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center' }}>
+          <RandomText text="Bicheng Gu" />
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="0.8em" 
+            height="0.8em" 
+            fill="grey"
+            style={{
+              marginLeft: '0.1em', 
+              width: '0.75em', 
+              height: '0.75em',
+              opacity: showIcon ? 1 : 0,
+              transition: 'opacity 4s ease-in-out'
+            }}
+            viewBox="0 0 16 16"
+          >
+            <path fillRule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+          </svg>
+        </a>
+      </div>
+      <div className="demo-author" hidden={true}>
+        <span className="underlined">
+          <a href="https://bicheng.me" target="_blank" rel="noopener noreferrer">bicheng Gu</a>
+        </span>
+        {" • "}
+        <a href="https://github.com/Bicheng-G/dithering-g" target="_blank" rel="noopener noreferrer" className="github-link">GitHub</a>
+      </div>
     </div>
-    <div className="demo-author" hidden={true}>
-      <span className="underlined">
-        <a href="https://bicheng.me" target="_blank" rel="noopener noreferrer">bicheng Gu</a>
-      </span>
-      {" • "}
-      <a href="https://github.com/Bicheng-G/dithering-g" target="_blank" rel="noopener noreferrer" className="github-link">GitHub</a>
-    </div>
-  </div>
-);
+  );
+}
 
 // Pre-loading the model to avoid blocking the main thread later
 useGLTF.preload('/elegant_g.glb');
