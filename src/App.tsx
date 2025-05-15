@@ -10,6 +10,7 @@ const LazyOrbitControls = lazy(() => import('@react-three/drei').then(module => 
 const LazyPostProcessing = lazy(() => import('./post-processing').then(module => ({ default: module.PostProcessing })));
 const LazyEnvironmentWrapper = lazy(() => import('./environment').then(module => ({ default: module.EnvironmentWrapper })));
 const LazyLeva = lazy(() => import('leva').then(module => ({ default: module.Leva })));
+const LazyHelmet = lazy(() => import('./Helmet'));
 
 const DemoName: FC = () => {
   // const [showIcon, setShowIcon] = useState(false); // No longer needed for continuous loop
@@ -168,7 +169,7 @@ export default function App(): JSX.Element {
               speed={2}
             >
               <Center scale={modelScale} position={[-0.18, 0.5, 0]} rotation={[0, -Math.PI / 3.5, -0.4]}>
-                <Helmet />
+                <LazyHelmet />
               </Center>
             </Float>
           </group>
@@ -199,44 +200,44 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/jousting-helmet-a4eea31d9d9441af9434a7da5ae46b54
 Title: Jousting Helmet
 */
-interface HelmetProps {
-  [key: string]: any;
-}
+// interface HelmetProps {  // This interface definition will be removed
+//   [key: string]: any;
+// }
 
-/**
- * 3D Helmet model component 
- */
-function Helmet(props: HelmetProps): JSX.Element | null {
-  const { nodes } = useGLTF('/elegant_g.glb') as any;
-
-  // Find the first mesh in the GLTF nodes
-  let firstMesh: THREE.Mesh | undefined = undefined;
-  for (const nodeName in nodes) {
-    if (nodes[nodeName] instanceof THREE.Mesh) {
-      firstMesh = nodes[nodeName] as THREE.Mesh;
-      break;
-    }
-  }
-
-  if (!firstMesh) {
-    console.warn("No mesh found in elegant_g.glb");
-    return null; // Or some placeholder
-  }
-
-  return (
-    <group {...props} dispose={null}>
-      <primitive 
-        object={firstMesh} 
-        castShadow 
-        material-roughness={0.15}
-        // Reset position, rotation, and scale from the original mesh
-        // as these are often handled by the <Center> and <Float> components
-        // or should be adjusted specifically for the new model.
-        // You might need to fine-tune these for elegant_g.glb
-        position={[0, 0, 0]} 
-        rotation={[0, 0, 0]}
-        scale={1} // Adjust scale as needed for elegant_g.glb
-      />
-    </group>
-  );
-} 
+// /**
+//  * 3D Helmet model component 
+//  */
+// function Helmet(props: HelmetProps): JSX.Element | null { // This function definition will be removed
+//   const { nodes } = useGLTF('/elegant_g.glb') as any;
+//
+//   // Find the first mesh in the GLTF nodes
+//   let firstMesh: THREE.Mesh | undefined = undefined;
+//   for (const nodeName in nodes) {
+//     if (nodes[nodeName] instanceof THREE.Mesh) {
+//       firstMesh = nodes[nodeName] as THREE.Mesh;
+//       break;
+//     }
+//   }
+//
+//   if (!firstMesh) {
+//     console.warn("No mesh found in elegant_g.glb");
+//     return null; // Or some placeholder
+//   }
+//
+//   return (
+//     <group {...props} dispose={null}>
+//       <primitive 
+//         object={firstMesh} 
+//         castShadow 
+//         material-roughness={0.15}
+//         // Reset position, rotation, and scale from the original mesh
+//         // as these are often handled by the <Center> and <Float> components
+//         // or should be adjusted specifically for the new model.
+//         // You might need to fine-tune these for elegant_g.glb
+//         position={[0, 0, 0]} 
+//         rotation={[0, 0, 0]}
+//         scale={1} // Adjust scale as needed for elegant_g.glb
+//       />
+//     </group>
+//   );
+// } 
