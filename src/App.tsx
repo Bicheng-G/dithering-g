@@ -147,9 +147,11 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      <Suspense fallback={null}>
-        <LazyLeva collapsed hidden={true} />
-      </Suspense>
+      {process.env.NODE_ENV === 'development' && (
+        <Suspense fallback={null}>
+          <LazyLeva collapsed hidden={true} />
+        </Suspense>
+      )}
       <Canvas 
         shadows 
         camera={{ position: [0, -1, 4], fov: 65 }}
