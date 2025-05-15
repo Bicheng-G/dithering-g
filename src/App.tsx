@@ -2,14 +2,13 @@ import { memo, FC, useEffect, useRef, useState, useCallback, lazy, Suspense } fr
 import { Canvas } from '@react-three/fiber';
 import { Center, Float, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { useControls, folder } from 'leva';
+import { useControls, folder, Leva } from 'leva';
 import { RandomText } from './RandomText';
 import './styles.css';
 
 const LazyOrbitControls = lazy(() => import('@react-three/drei').then(module => ({ default: module.OrbitControls })));
 const LazyPostProcessing = lazy(() => import('./post-processing').then(module => ({ default: module.PostProcessing })));
 const LazyEnvironmentWrapper = lazy(() => import('./environment').then(module => ({ default: module.EnvironmentWrapper })));
-const LazyLeva = lazy(() => import('leva').then(module => ({ default: module.Leva })));
 const LazyHelmet = lazy(() => import('./Helmet'));
 
 const DemoName: FC = () => {
@@ -147,11 +146,10 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      {process.env.NODE_ENV === 'development' && (
-        <Suspense fallback={null}>
-          <LazyLeva collapsed hidden={true} />
-        </Suspense>
-      )}
+      <Leva 
+        collapsed={process.env.NODE_ENV === 'development' ? true : false} // Collapse in dev, doesn't matter in prod if hidden
+        hidden={process.env.NODE_ENV === 'production'} 
+      />
       <Canvas 
         shadows 
         camera={{ position: [0, -1, 4], fov: 65 }}
