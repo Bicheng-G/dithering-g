@@ -18,7 +18,8 @@ body {
 
 @font-face {
   font-family: 'OptimusPrinceps';
-  src: url('../public/OptimusPrinceps.ttf') format('truetype');
+  src: url('../public/OptimusPrinceps.woff2') format('woff2'),
+       url('../public/OptimusPrinceps.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -26,7 +27,8 @@ body {
 
 @font-face {
   font-family: 'OptimusPrincepsSemiBold';
-  src: url('../public/OptimusPrincepsSemiBold.ttf') format('truetype');
+  src: url('../public/OptimusPrincepsSemiBold.woff2') format('woff2'),
+       url('../public/OptimusPrincepsSemiBold.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

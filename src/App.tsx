@@ -1,15 +1,15 @@
-import { memo, FC, useEffect, useRef, useState, useCallback } from 'react';
+import { memo, FC, useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Center, Float, useGLTF } from '@react-three/drei';
-import { PostProcessing } from './post-processing';
-import { EnvironmentWrapper } from './environment';
+import { Center, Float, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
-import { useControls, folder, Leva } from 'leva';
+import { useControls, folder } from 'leva';
 import { RandomText } from './RandomText';
 import './styles.css';
 
-// Remove commented out lazy load
-// const Leva = lazy(() => import('leva').then(module => ({ default: module.Leva })));
+const LazyOrbitControls = lazy(() => import('@react-three/drei').then(module => ({ default: module.OrbitControls })));
+const LazyPostProcessing = lazy(() => import('./post-processing').then(module => ({ default: module.PostProcessing })));
+const LazyEnvironmentWrapper = lazy(() => import('./environment').then(module => ({ default: module.EnvironmentWrapper })));
+const LazyLeva = lazy(() => import('leva').then(module => ({ default: module.Leva })));
 
 const DemoName: FC = () => {
   // const [showIcon, setShowIcon] = useState(false); // No longer needed for continuous loop
@@ -146,10 +146,9 @@ export default function App(): JSX.Element {
 
   return (
     <>
-      {/* <Suspense fallback={null}>
-        <Leva collapsed hidden={true} />
-      </Suspense> */}
-      <Leva collapsed hidden={true} />
+      <Suspense fallback={null}>
+        <LazyLeva collapsed hidden={true} />
+      </Suspense>
       <Canvas 
         shadows 
         camera={{ position: [0, -1, 4], fov: 65 }}
@@ -161,20 +160,22 @@ export default function App(): JSX.Element {
           gl.setClearColor(new THREE.Color(bgColor));
         }}
       >
-        <group position={[-0.18, -0.5, 0]}>
-          <Float 
-            floatIntensity={2} 
-            rotationIntensity={1}
-            speed={2}
-          >
-            <Center scale={modelScale} position={[-0.18, 0.5, 0]} rotation={[0, -Math.PI / 3.5, -0.4]}>
-              <Helmet />
-            </Center>
-          </Float>
-        </group>
-        <OrbitControls />
-        <EnvironmentWrapper intensity={intensity} highlight={highlight} />
-        <Effects />
+        <Suspense fallback={null}>
+          <group position={[-0.18, -0.5, 0]}>
+            <Float 
+              floatIntensity={2} 
+              rotationIntensity={1}
+              speed={2}
+            >
+              <Center scale={modelScale} position={[-0.18, 0.5, 0]} rotation={[0, -Math.PI / 3.5, -0.4]}>
+                <Helmet />
+              </Center>
+            </Float>
+          </group>
+          <LazyOrbitControls />
+          <LazyEnvironmentWrapper intensity={intensity} highlight={highlight} />
+          <Effects />
+        </Suspense>
       </Canvas>
       <DemoName />
     </>
@@ -186,7 +187,7 @@ export default function App(): JSX.Element {
  * Memoized to prevent unnecessary re-renders
  */
 const Effects: FC = memo(() => (
-  <PostProcessing />
+  <LazyPostProcessing />
 ))
 
 /*
